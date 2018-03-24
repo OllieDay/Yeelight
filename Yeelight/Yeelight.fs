@@ -53,7 +53,7 @@ module Yeelight
         | Regex "\"result\":\[\"ok\"\]" _ ->
             Ok
         // Unsuccessful requests return a response containing an integer code and a string message
-        | Regex "\"error\":{\"code\":(-?\\d+), \"message\":\"(.*)\"}" matches ->
+        | Regex "\"error\":{\"code\":(-?\\d+),\"message\":\"(.*)\"}" matches ->
             Error (List.last matches)
         | _ ->
             Error "invalid response"
