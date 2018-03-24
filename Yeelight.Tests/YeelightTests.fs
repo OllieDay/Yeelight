@@ -28,14 +28,14 @@ module YeelightTests
             |> should equal Yeelight.Ok
 
     [<Fact>]
-    let off () =
+    let ``off suddenly`` () =
         address
             |> Yeelight.off Yeelight.Sudden 0
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
     [<Fact>]
-    let on () =
+    let ``on suddenly`` () =
         address
             |> Yeelight.on Yeelight.Sudden 0
             |> Async.RunSynchronously
