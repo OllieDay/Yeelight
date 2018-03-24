@@ -100,8 +100,8 @@ module Yeelight
             return parseResponse response
         }
 
-    let setPower power effect duration address =
-        communicate SetPower [Power power; Effect effect; Duration duration] address
+    let setPower power effect duration =
+        communicate SetPower [Power power; Effect effect; Duration duration]
 
     let toggle : IPAddress -> Async<Response> =
         communicate Toggle []
