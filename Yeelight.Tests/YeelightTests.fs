@@ -42,9 +42,9 @@ module YeelightTests
             |> should equal Yeelight.Ok
 
     [<Fact>]
-    let ``set brightness to 50 suddenly`` () =
+    let ``set brightness to 1 suddenly`` () =
         address
-            |> Yeelight.setBrightness 50 Yeelight.Sudden 0
+            |> Yeelight.setBrightness 1 Yeelight.Sudden 0
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
