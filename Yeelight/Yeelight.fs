@@ -8,14 +8,16 @@ module Yeelight
 
     type Power = Off | On
     type Brightness = int
+    type Temperature = int
     type Effect = Sudden | Smooth
     type Duration = int
     type Response = Ok | Error of string
 
-    type private Method = SetPower | Toggle | SetBrightness
+    type private Method = SetPower | Toggle | SetBrightness | SetTemperature
     type private Parameter =
         | Power of Power
         | Brightness of Brightness
+        | Temperature of Temperature
         | Effect of Effect
         | Duration of Duration
 
@@ -62,6 +64,7 @@ module Yeelight
         | SetPower -> "set_power"
         | Toggle -> "toggle"
         | SetBrightness -> "set_bright"
+        | SetTemperature -> "set_ct_abx"
 
     // string parameters should always be quoted; int parameters should not
     let private stringifyParameter = function
@@ -71,6 +74,8 @@ module Yeelight
             | On -> "\"on\""
         | Brightness brightness ->
             string brightness
+        | Temperature temperature ->
+            string temperature
         | Effect effect ->
             match effect with
             | Sudden -> "\"sudden\""
@@ -109,3 +114,6 @@ module Yeelight
 
     let setBrightness brightness effect duration =
         communicate SetBrightness [Brightness brightness; Effect effect; Duration duration]
+
+    let setTemperature temperature effect duration =
+        communicate SetTemperature [Temperature temperature; Effect effect; Duration duration]
