@@ -68,3 +68,10 @@ module YeelightTests
             |> Yeelight.setTemperature 6500 Yeelight.Sudden 0
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
+
+    [<Fact>]
+    let ``set name to "Yeelight"`` () =
+        address
+            |> Yeelight.setName "Yeelight"
+            |> Async.RunSynchronously
+            |> should equal Yeelight.Ok

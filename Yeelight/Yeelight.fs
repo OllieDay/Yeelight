@@ -11,15 +11,23 @@ module Yeelight
     type Temperature = int
     type Effect = Sudden | Smooth
     type Duration = int
+    type Name = string
     type Response = Ok | Error of string
 
-    type private Method = SetPower | Toggle | SetBrightness | SetTemperature
+    type private Method =
+        | SetPower
+        | Toggle
+        | SetBrightness
+        | SetTemperature
+        | SetName
+
     type private Parameter =
         | Power of Power
         | Brightness of Brightness
         | Temperature of Temperature
         | Effect of Effect
         | Duration of Duration
+        | Name of Name
 
     let private port = 55443
 
@@ -65,6 +73,7 @@ module Yeelight
         | Toggle -> "toggle"
         | SetBrightness -> "set_bright"
         | SetTemperature -> "set_ct_abx"
+        | SetName -> "set_name"
 
     // string parameters should always be quoted; int parameters should not
     let private stringifyParameter = function
@@ -82,6 +91,8 @@ module Yeelight
             | Smooth -> "\"smooth\""
         | Duration duration ->
             string duration
+        | Name name ->
+            sprintf "\"%s\"" name
 
     let private communicate method parameters (address : IPAddress) =
         let method = stringifyMethod method
@@ -117,3 +128,6 @@ module Yeelight
 
     let setTemperature temperature effect duration =
         communicate SetTemperature [Temperature temperature; Effect effect; Duration duration]
+
+    let setName name =
+        communicate SetName [Name name]
