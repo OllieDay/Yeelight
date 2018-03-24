@@ -7,12 +7,17 @@ module Yeelight
     open System.Text.RegularExpressions
 
     type Power = Off | On
+    type Brightness = int
     type Effect = Sudden | Smooth
     type Duration = int
     type Response = Ok | Error of string
 
-    type private Method = SetPower | Toggle
-    type private Parameter = Power of Power | Effect of Effect | Duration of Duration
+    type private Method = SetPower | Toggle | SetBrightness
+    type private Parameter =
+        | Power of Power
+        | Brightness of Brightness
+        | Effect of Effect
+        | Duration of Duration
 
     let private port = 55443
 
@@ -56,6 +61,7 @@ module Yeelight
     let private stringifyMethod = function
         | SetPower -> "set_power"
         | Toggle -> "toggle"
+        | SetBrightness -> "set_bright"
 
     // string parameters should always be quoted; int parameters should not
     let private stringifyParameter = function
@@ -63,6 +69,8 @@ module Yeelight
             match power with
             | Off -> "\"off\""
             | On -> "\"on\""
+        | Brightness brightness ->
+            string brightness
         | Effect effect ->
             match effect with
             | Sudden -> "\"sudden\""
@@ -98,3 +106,6 @@ module Yeelight
 
     let on : Effect -> Duration -> IPAddress -> Async<Response> =
         setPower On
+
+    let setBrightness brightness effect duration =
+        communicate SetBrightness [Brightness brightness; Effect effect; Duration duration]

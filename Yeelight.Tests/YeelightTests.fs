@@ -40,3 +40,17 @@ module YeelightTests
             |> Yeelight.on Yeelight.Sudden 0
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
+
+    [<Fact>]
+    let ``set brightness to 50 suddenly`` () =
+        address
+            |> Yeelight.setBrightness 50 Yeelight.Sudden 0
+            |> Async.RunSynchronously
+            |> should equal Yeelight.Ok
+
+    [<Fact>]
+    let ``set brightness to 100 suddenly`` () =
+        address
+            |> Yeelight.setBrightness 100 Yeelight.Sudden 0
+            |> Async.RunSynchronously
+            |> should equal Yeelight.Ok
