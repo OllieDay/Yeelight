@@ -9,6 +9,7 @@ module Yeelight
     type Power = Off | On
     type Brightness = int
     type Temperature = int
+    type Color = Rgb of int * int * int | Hsv of int * int
     type Effect = Sudden | Smooth
     type Duration = int
     type Name = string
@@ -19,12 +20,15 @@ module Yeelight
         | Toggle
         | SetBrightness
         | SetTemperature
+        | SetRgb
+        | SetHsv
         | SetName
 
     type private Parameter =
         | Power of Power
         | Brightness of Brightness
         | Temperature of Temperature
+        | Color of Color
         | Effect of Effect
         | Duration of Duration
         | Name of Name
@@ -73,6 +77,8 @@ module Yeelight
         | Toggle -> "toggle"
         | SetBrightness -> "set_bright"
         | SetTemperature -> "set_ct_abx"
+        | SetRgb -> "set_rgb"
+        | SetHsv -> "set_hsv"
         | SetName -> "set_name"
 
     // string parameters should always be quoted; int parameters should not
@@ -85,6 +91,18 @@ module Yeelight
             string brightness
         | Temperature temperature ->
             string temperature
+        | Color color ->
+            match color with
+            // RGB is represented as an integer 0 to 16777215 (0xFFFFFF) where each component is 2 bytes
+            | Rgb (r, g, b) ->
+                let r = uint32 r &&& 0xFFu <<< 16
+                let g = uint32 g &&& 0xFFu <<< 8
+                let b = uint32 b &&& 0xFFu
+                let rgb = r ||| g ||| b
+                string rgb
+            // HSV is represented as an integer 0 to 359 for hue and an integer 0 to 100 for saturation
+            | Hsv (h, s) ->
+                sprintf "%d,%d" h s
         | Effect effect ->
             match effect with
             | Sudden -> "\"sudden\""
@@ -128,6 +146,13 @@ module Yeelight
 
     let setTemperature temperature effect duration =
         communicate SetTemperature [Temperature temperature; Effect effect; Duration duration]
+
+    let setColor color effect duration =
+        let method =
+            match color with
+            | Rgb _ -> SetRgb
+            | Hsv _ -> SetHsv
+        communicate method [Color color; Effect effect; Duration duration]
 
     let setName name =
         communicate SetName [Name name]

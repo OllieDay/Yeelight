@@ -75,3 +75,22 @@ module YeelightTests
             |> Yeelight.setName "Yeelight"
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
+
+    [<Theory>]
+    [<InlineData (255, 0, 0)>]
+    [<InlineData (0, 255, 0)>]
+    [<InlineData (0, 0, 255)>]
+    let ``set color to RGB suddenly`` rgb =
+        address
+            |> Yeelight.setColor (Yeelight.Rgb rgb) Yeelight.Sudden 0
+            |> Async.RunSynchronously
+            |> should equal Yeelight.Ok
+
+    [<Theory>]
+    [<InlineData (0, 50)>]
+    [<InlineData (180, 100)>]
+    let ``set color to HSV suddenly`` hsv =
+        address
+            |> Yeelight.setColor (Yeelight.Hsv hsv) Yeelight.Sudden 0
+            |> Async.RunSynchronously
+            |> should equal Yeelight.Ok
