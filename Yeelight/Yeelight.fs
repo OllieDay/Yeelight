@@ -9,7 +9,12 @@ module Yeelight
     type Power = Off | On
     type Brightness = int
     type Temperature = int
-    type Color = Rgb of int * int * int | Hsv of int * int
+    type Red = int
+    type Green = int
+    type Blue = int
+    type Hue = int
+    type Saturation = int
+    type Color = Rgb of Red * Green * Blue | Hsv of Hue * Saturation
     type Effect = Sudden | Smooth of uint32
     type Name = string
     type Response = Ok | Error of string
