@@ -11,7 +11,7 @@ module Yeelight
     type Temperature = int
     type Color = Rgb of int * int * int | Hsv of int * int
     type Effect = Sudden | Smooth
-    type Duration = int
+    type Duration = uint32
     type Name = string
     type Response = Ok | Error of string
 

@@ -9,14 +9,14 @@ module YeelightTests
     [<Fact>]
     let ``set power off suddenly`` () =
         address
-            |> Yeelight.setPower Yeelight.Off Yeelight.Sudden 0
+            |> Yeelight.setPower Yeelight.Off Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
     [<Fact>]
     let ``set power on suddenly`` () =
         address
-            |> Yeelight.setPower Yeelight.On Yeelight.Sudden 0
+            |> Yeelight.setPower Yeelight.On Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
@@ -30,14 +30,14 @@ module YeelightTests
     [<Fact>]
     let ``off suddenly`` () =
         address
-            |> Yeelight.off Yeelight.Sudden 0
+            |> Yeelight.off Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
     [<Fact>]
     let ``on suddenly`` () =
         address
-            |> Yeelight.on Yeelight.Sudden 0
+            |> Yeelight.on Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
@@ -46,7 +46,7 @@ module YeelightTests
     [<InlineData 100>]
     let ``set brightness suddenly`` brightness =
         address
-            |> Yeelight.setBrightness brightness Yeelight.Sudden 0
+            |> Yeelight.setBrightness brightness Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
@@ -55,7 +55,7 @@ module YeelightTests
     [<InlineData 6500>]
     let ``set temperature suddenly`` temperature =
         address
-            |> Yeelight.setTemperature temperature Yeelight.Sudden 0
+            |> Yeelight.setTemperature temperature Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
@@ -72,7 +72,7 @@ module YeelightTests
     [<InlineData (0, 0, 255)>]
     let ``set color to RGB suddenly`` rgb =
         address
-            |> Yeelight.setColor (Yeelight.Rgb rgb) Yeelight.Sudden 0
+            |> Yeelight.setColor (Yeelight.Rgb rgb) Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
 
@@ -81,6 +81,6 @@ module YeelightTests
     [<InlineData (180, 100)>]
     let ``set color to HSV suddenly`` hsv =
         address
-            |> Yeelight.setColor (Yeelight.Hsv hsv) Yeelight.Sudden 0
+            |> Yeelight.setColor (Yeelight.Hsv hsv) Yeelight.Sudden 0u
             |> Async.RunSynchronously
             |> should equal Yeelight.Ok
