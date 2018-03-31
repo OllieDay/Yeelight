@@ -10,8 +10,7 @@ module Yeelight
     type Brightness = int
     type Temperature = int
     type Color = Rgb of int * int * int | Hsv of int * int
-    type Effect = Sudden | Smooth
-    type Duration = uint32
+    type Effect = Sudden | Smooth of uint32
     type Name = string
     type Response = Ok | Error of string
 
@@ -30,7 +29,6 @@ module Yeelight
         | Temperature of Temperature
         | Color of Color
         | Effect of Effect
-        | Duration of Duration
         | Name of Name
 
     let private port = 55443
@@ -104,11 +102,13 @@ module Yeelight
             | Hsv (h, s) ->
                 sprintf "%d,%d" h s
         | Effect effect ->
+            // Effect consists of "sudden"|"smooth" plus a uint32 duration.
             match effect with
-            | Sudden -> "\"sudden\""
-            | Smooth -> "\"smooth\""
-        | Duration duration ->
-            string duration
+            | Sudden ->
+                // Duration is ignored by the device but must be included in the request; set to 0
+                "\"sudden\",0"
+            | Smooth duration ->
+                sprintf "\"smooth\",%d" duration
         | Name name ->
             sprintf "\"%s\"" name
 
@@ -129,30 +129,30 @@ module Yeelight
             return parseResponse response
         }
 
-    let setPower power effect duration =
-        communicate SetPower [Power power; Effect effect; Duration duration]
+    let setPower power effect =
+        communicate SetPower [Power power; Effect effect]
 
     let toggle : IPAddress -> Async<Response> =
         communicate Toggle []
 
-    let off : Effect -> Duration -> IPAddress -> Async<Response> =
+    let off : Effect -> IPAddress -> Async<Response> =
         setPower Off
 
-    let on : Effect -> Duration -> IPAddress -> Async<Response> =
+    let on : Effect -> IPAddress -> Async<Response> =
         setPower On
 
-    let setBrightness brightness effect duration =
-        communicate SetBrightness [Brightness brightness; Effect effect; Duration duration]
+    let setBrightness brightness effect =
+        communicate SetBrightness [Brightness brightness; Effect effect]
 
-    let setTemperature temperature effect duration =
-        communicate SetTemperature [Temperature temperature; Effect effect; Duration duration]
+    let setTemperature temperature effect =
+        communicate SetTemperature [Temperature temperature; Effect effect]
 
-    let setColor color effect duration =
+    let setColor color effect =
         let method =
             match color with
             | Rgb _ -> SetRgb
             | Hsv _ -> SetHsv
-        communicate method [Color color; Effect effect; Duration duration]
+        communicate method [Color color; Effect effect]
 
     let setName name =
         communicate SetName [Name name]
