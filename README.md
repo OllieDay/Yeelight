@@ -2,6 +2,22 @@
 
 Library for controlling Xiaomi Yeelight Smart LED Bulb.
 
+## Getting started
+
+Install the NuGet package into your application.
+
+### Package Manager
+
+```
+Install-Package Yeelight
+```
+
+### .NET CLI
+
+```
+dotnet add package Yeelight
+```
+
 ## Usage
 
 All functions take an `IPAddress` for the target light.
